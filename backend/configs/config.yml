@@ -1,0 +1,14 @@
+server:
+  port: 8080
+  host: localhost
+
+database:
+  dialect: "postgres"
+  database: "movies_db"
+  username: "user"
+  password: "secret"
+  port: "5432"
+  host: "localhost"
+  ssl_mode: "disable"
+  schema: "public"
+  migration_path: "file://./migrations"

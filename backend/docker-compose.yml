@@ -1,0 +1,44 @@
+services:
+
+  db:
+    image: postgres:16-alpine
+    restart: always
+    environment:
+      POSTGRES_DB: movies_db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: secret
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d subscription"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  migrate:
+    image: migrate/migrate:v4.17.1
+    container_name: subscription-migrate
+
+    volumes:
+      - ./migrations:/migrations
+
+    command:
+      [
+        "-path=/migrations",
+        "-database=postgres://user:secret@db:5432/movies_db?sslmode=disable",
+        "up"
+      ]
+
+    depends_on:
+      db:
+        condition: service_healthy
+
+    restart: "no"
+
+volumes:
+  postgres_data:

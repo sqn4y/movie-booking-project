@@ -27,13 +27,31 @@ func Create(bookingHandler *api.BookingHandler, movieHandler *api.MovieHandler, 
 	router.HandleFunc("/booking/{id}", bookingHandler.Delete).Methods("DELETE")
 	router.HandleFunc("/booking/{id}", bookingHandler.Update).Methods("PUT")
 
+	m.PathPrefix("/").Methods(http.MethodOptions).HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusNoContent)
+	})
+	m.PathPrefix("/static/").Handler(http.StripPrefix("/static/", http.FileServer(http.Dir(staticPath()))))
 	m.HandleFunc("/swagger/doc.json", swaggerDoc).Methods("GET")
 	m.PathPrefix("/swagger/").Handler(httpSwagger.Handler(
 		httpSwagger.URL("/swagger/doc.json"),
 	))
 
+	m.Use(corsMiddleware)
 	m.Use(loggingMiddleware(logger))
 	return m
+}
+
+func corsMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+		if r.Method == http.MethodOptions {
+			w.WriteHeader(http.StatusNoContent)
+			return
+		}
+		next.ServeHTTP(w, r)
+	})
 }
 
 func swaggerDoc(w http.ResponseWriter, r *http.Request) {
@@ -58,6 +76,19 @@ func swaggerDocPath() string {
 	}
 
 	return filepath.Join(filepath.Dir(file), "..", "..", "docs", "openapi.json")
+}
+
+func staticPath() string {
+	if _, err := os.Stat("static"); err == nil {
+		return "static"
+	}
+
+	_, file, _, ok := runtime.Caller(0)
+	if !ok {
+		return "static"
+	}
+
+	return filepath.Join(filepath.Dir(file), "..", "..", "static")
 }
 
 func loggingMiddleware(logger *slog.Logger) mux.MiddlewareFunc {

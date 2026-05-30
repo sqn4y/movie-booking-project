@@ -12,6 +12,7 @@ func TestRequestMovieMovie(t *testing.T) {
 		Director:    "Christopher Nolan",
 		Duration:    10800,
 		Description: "Movie description",
+		ImageURL:    "/static/images/oppenheimer.svg",
 		GenreIDs:    []int64{1, 3},
 		AgeRating:   18,
 		ReleaseDate: releaseDate,
@@ -27,6 +28,9 @@ func TestRequestMovieMovie(t *testing.T) {
 	}
 	if movie.Duration != req.Duration {
 		t.Fatalf("expected duration %d, got %d", req.Duration, movie.Duration)
+	}
+	if movie.ImageURL != req.ImageURL {
+		t.Fatalf("expected image url %q, got %q", req.ImageURL, movie.ImageURL)
 	}
 	if movie.AgeRating != req.AgeRating {
 		t.Fatalf("expected age rating %d, got %d", req.AgeRating, movie.AgeRating)

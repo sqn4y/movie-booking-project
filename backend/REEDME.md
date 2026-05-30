@@ -29,6 +29,43 @@ OpenAPI JSON доступен по адресу:
 http://localhost:8080/swagger/doc.json
 ```
 
+## Frontend
+
+Frontend находится в соседней директории `frontend`.
+
+Запуск через простой static server:
+
+```bash
+cd ../frontend
+python3 -m http.server 5173
+```
+
+Интерфейс будет доступен на `http://localhost:5173`.
+
+## Картинки фильмов
+
+Поле `image_url` хранит ссылку на картинку фильма.
+
+Статичные картинки хранятся в директории:
+
+```text
+static/images
+```
+
+Backend отдаёт их по адресу:
+
+```text
+http://localhost:8080/static/images/{file_name}
+```
+
+Пример значения для фильма:
+
+```json
+{
+  "image_url": "/static/images/oppenheimer.svg"
+}
+```
+
 ## Тесты
 
 ```bash
@@ -72,6 +109,7 @@ curl -X POST http://localhost:8080/api/v1/movie \
       "director": "Кристофер Нолан",
       "duration": 10800,
       "description": "История американского физика Роберта Оппенгеймера",
+      "image_url": "/static/images/oppenheimer.svg",
       "genre_ids": [1,3],
       "age_rating": 18,
       "release_date": "2024-12-01T00:00:00Z"

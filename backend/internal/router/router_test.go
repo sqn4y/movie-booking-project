@@ -31,3 +31,17 @@ func TestSwaggerDoc(t *testing.T) {
 		t.Fatalf("expected openapi 3.0.3, got %v", doc["openapi"])
 	}
 }
+
+func TestStaticFiles(t *testing.T) {
+	logger := slog.New(slog.NewTextHandler(io.Discard, nil))
+	r := Create(api.NewBookingHandler(nil, logger), api.NewMovieHandler(nil, logger), logger)
+
+	rec := httptest.NewRecorder()
+	req := httptest.NewRequest(http.MethodGet, "/static/images/oppenheimer.svg", nil)
+
+	r.ServeHTTP(rec, req)
+
+	if rec.Code != http.StatusOK {
+		t.Fatalf("expected status %d, got %d", http.StatusOK, rec.Code)
+	}
+}

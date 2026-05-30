@@ -38,6 +38,7 @@ func (m *movieRepository) FindAll(ctx context.Context) ([]*model.Movie, error) {
 			m.director,
 			m.duration,
 			m.description,
+			m.image_url,
 			m.age_rating,
 			m.release_date,
 			m.created_at,
@@ -73,6 +74,7 @@ func (m *movieRepository) FindAll(ctx context.Context) ([]*model.Movie, error) {
 			&movie.Director,
 			&movie.Duration,
 			&movie.Description,
+			&movie.ImageURL,
 			&movie.AgeRating,
 			&movie.ReleaseDate,
 			&movie.CreatedAt,
@@ -110,17 +112,19 @@ func (m *movieRepository) Save(ctx context.Context, movie *model.Movie, genreIds
                     director,
                     duration,
                     description,
+                    image_url,
                     age_rating,
                     release_date,
                     created_at,
                     updated_at
-		      ) values ($1, $2, $3, $4, $5, $6, $7, $8) returning id`
+		      ) values ($1, $2, $3, $4, $5, $6, $7, $8, $9) returning id`
 
 	err = tx.QueryRowContext(ctx, query,
 		movie.Title,
 		movie.Director,
 		movie.Duration,
 		movie.Description,
+		movie.ImageURL,
 		movie.AgeRating,
 		movie.ReleaseDate,
 		now,

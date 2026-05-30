@@ -56,6 +56,7 @@ func TestMovieHandlerSave(t *testing.T) {
 		"director": "Director",
 		"duration": 120,
 		"description": "Description",
+		"image_url": "/static/images/oppenheimer.svg",
 		"genre_ids": [1, 3],
 		"age_rating": 18,
 		"release_date": "2024-12-01T00:00:00Z"
@@ -67,6 +68,9 @@ func TestMovieHandlerSave(t *testing.T) {
 		DoAndReturn(func(_ context.Context, movie *model.Movie, genreIDs []int64) (*model.ResponseMovie, error) {
 			if movie.Title != "Movie" {
 				t.Fatalf("expected title Movie, got %q", movie.Title)
+			}
+			if movie.ImageURL != "/static/images/oppenheimer.svg" {
+				t.Fatalf("expected image url, got %q", movie.ImageURL)
 			}
 			if !movie.ReleaseDate.Equal(releaseDate) {
 				t.Fatalf("expected release date %s, got %s", releaseDate, movie.ReleaseDate)

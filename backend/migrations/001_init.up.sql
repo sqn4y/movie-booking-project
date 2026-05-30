@@ -12,6 +12,7 @@ CREATE TABLE IF NOT EXISTS movies
     director     VARCHAR(255) NOT NULL,
     duration     INTEGER      NOT NULL,
     description  TEXT,
+    image_url    TEXT         NOT NULL DEFAULT '',
     age_rating   INTEGER      NOT NULL,
     release_date TIMESTAMP,
     created_at   TIMESTAMP,

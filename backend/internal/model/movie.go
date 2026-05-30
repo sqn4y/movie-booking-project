@@ -8,6 +8,7 @@ type Movie struct {
 	Director    string    `json:"director"`
 	Duration    int64     `json:"duration"`
 	Description string    `json:"description"`
+	ImageURL    string    `json:"image_url"`
 	Genres      []Genre   `json:"genres"`
 	AgeRating   int       `json:"age_rating"`
 	ReleaseDate time.Time `json:"release_date"`
@@ -25,6 +26,7 @@ type UpdateMovie struct {
 	Director    *string    `json:"director"`
 	Duration    *int64     `json:"duration"`
 	Description *string    `json:"description"`
+	ImageURL    *string    `json:"image_url"`
 	GenreIDs    []int64    `json:"genre_ids"`
 	AgeRating   *int       `json:"age_rating"`
 	ReleaseDate *time.Time `json:"release_date"`
@@ -35,6 +37,7 @@ type RequestMovie struct {
 	Director    string    `json:"director"`
 	Duration    int64     `json:"duration"`
 	Description string    `json:"description"`
+	ImageURL    string    `json:"image_url"`
 	GenreIDs    []int64   `json:"genre_ids"`
 	AgeRating   int       `json:"age_rating"`
 	ReleaseDate time.Time `json:"release_date"`
@@ -46,6 +49,7 @@ type ResponseMovie struct {
 	Director    string    `json:"director"`
 	Duration    int64     `json:"duration"`
 	Description string    `json:"description"`
+	ImageURL    string    `json:"image_url"`
 	Genres      []*Genre  `json:"genres"`
 	AgeRating   int       `json:"age_rating"`
 	ReleaseDate time.Time `json:"release_date"`
@@ -59,6 +63,7 @@ func (r *RequestMovie) Movie() *Movie {
 		Director:    r.Director,
 		Duration:    r.Duration,
 		Description: r.Description,
+		ImageURL:    r.ImageURL,
 		AgeRating:   r.AgeRating,
 		ReleaseDate: r.ReleaseDate,
 	}
@@ -71,6 +76,7 @@ func (m *Movie) ResponseMovie() *ResponseMovie {
 		Director:    m.Director,
 		Duration:    m.Duration,
 		Description: m.Description,
+		ImageURL:    m.ImageURL,
 		AgeRating:   m.AgeRating,
 		ReleaseDate: m.ReleaseDate,
 		CreatedAt:   m.CreatedAt,

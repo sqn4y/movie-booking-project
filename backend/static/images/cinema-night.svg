@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="960" viewBox="0 0 640 960">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#151927"/>
+      <stop offset="0.55" stop-color="#304b5f"/>
+      <stop offset="1" stop-color="#111318"/>
+    </linearGradient>
+  </defs>
+  <rect width="640" height="960" fill="url(#g)"/>
+  <rect x="80" y="170" width="480" height="270" rx="10" fill="#d8eef2"/>
+  <path d="M110 410 L530 410 L480 720 L160 720 Z" fill="#19202c"/>
+  <g fill="#e94646">
+    <circle cx="198" cy="602" r="22"/>
+    <circle cx="278" cy="602" r="22"/>
+    <circle cx="358" cy="602" r="22"/>
+    <circle cx="438" cy="602" r="22"/>
+  </g>
+  <text x="70" y="790" fill="#ffffff" font-family="Arial, sans-serif" font-size="54" font-weight="700">Киноночь</text>
+  <text x="72" y="846" fill="#9ed7e5" font-family="Arial, sans-serif" font-size="28">зал • премьера</text>
+</svg>

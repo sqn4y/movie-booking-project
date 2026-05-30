@@ -43,8 +43,6 @@ CREATE TABLE IF NOT EXISTS bookings
     CONSTRAINT fk_bookings_movie FOREIGN KEY (movie_id)
         REFERENCES movies (id) ON DELETE RESTRICT
 );
-
--- Индексы
 CREATE INDEX idx_bookings_user_id ON bookings (user_id);
 CREATE INDEX idx_bookings_movie_id ON bookings (movie_id);
 CREATE INDEX idx_bookings_status ON bookings (status);

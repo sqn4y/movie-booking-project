@@ -4,9 +4,13 @@ import (
 	"backend/internal/api"
 	"log/slog"
 	"net/http"
+	"os"
+	"path/filepath"
+	"runtime"
 	"time"
 
 	"github.com/gorilla/mux"
+	httpSwagger "github.com/swaggo/http-swagger"
 )
 
 const URL = "/api/v1"
@@ -23,8 +27,37 @@ func Create(bookingHandler *api.BookingHandler, movieHandler *api.MovieHandler, 
 	router.HandleFunc("/booking/{id}", bookingHandler.Delete).Methods("DELETE")
 	router.HandleFunc("/booking/{id}", bookingHandler.Update).Methods("PUT")
 
+	m.HandleFunc("/swagger/doc.json", swaggerDoc).Methods("GET")
+	m.PathPrefix("/swagger/").Handler(httpSwagger.Handler(
+		httpSwagger.URL("/swagger/doc.json"),
+	))
+
 	m.Use(loggingMiddleware(logger))
 	return m
+}
+
+func swaggerDoc(w http.ResponseWriter, r *http.Request) {
+	data, err := os.ReadFile(swaggerDocPath())
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	_, _ = w.Write(data)
+}
+
+func swaggerDocPath() string {
+	if _, err := os.Stat("docs/openapi.json"); err == nil {
+		return "docs/openapi.json"
+	}
+
+	_, file, _, ok := runtime.Caller(0)
+	if !ok {
+		return "docs/openapi.json"
+	}
+
+	return filepath.Join(filepath.Dir(file), "..", "..", "docs", "openapi.json")
 }
 
 func loggingMiddleware(logger *slog.Logger) mux.MiddlewareFunc {

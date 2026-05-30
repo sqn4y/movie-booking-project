@@ -1,0 +1,390 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Movie Booking Backend API",
+    "description": "REST API для фильмов и бронирований.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080"
+    }
+  ],
+  "paths": {
+    "/api/v1/movie": {
+      "post": {
+        "summary": "Создать фильм",
+        "tags": ["movie"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestMovie"
+              },
+              "example": {
+                "title": "Оппенгеймер",
+                "director": "Кристофер Нолан",
+                "duration": 10800,
+                "description": "История американского физика Роберта Оппенгеймера",
+                "genre_ids": [1, 3],
+                "age_rating": 18,
+                "release_date": "2024-12-01T00:00:00Z"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Фильм создан",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseMovie"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      }
+    },
+    "/api/v1/movies": {
+      "get": {
+        "summary": "Получить список фильмов",
+        "tags": ["movie"],
+        "responses": {
+          "200": {
+            "description": "Список фильмов",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ResponseMovie"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      }
+    },
+    "/api/v1/booking": {
+      "post": {
+        "summary": "Создать бронь",
+        "tags": ["booking"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestBooking"
+              },
+              "example": {
+                "movie_id": 1,
+                "seats": ["A1", "A2"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Бронь создана",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Booking"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      }
+    },
+    "/api/v1/booking/{id}": {
+      "put": {
+        "summary": "Изменить бронь",
+        "tags": ["booking"],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ID"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateBooking"
+              },
+              "example": {
+                "seats": ["B1", "B2"],
+                "status": "approved"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Бронь изменена",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseBooking"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Удалить бронь",
+        "tags": ["booking"],
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ID"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Бронь удалена"
+          },
+          "400": {
+            "$ref": "#/components/responses/ValidationError"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalError"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "parameters": {
+      "ID": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "schema": {
+          "type": "integer",
+          "format": "int64",
+          "minimum": 1
+        }
+      }
+    },
+    "responses": {
+      "ValidationError": {
+        "description": "Ошибка валидации",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/AppError"
+            }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "Не найдено",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/AppError"
+            }
+          }
+        }
+      },
+      "InternalError": {
+        "description": "Внутренняя ошибка",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/AppError"
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "Genre": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "RequestMovie": {
+        "type": "object",
+        "required": ["title", "director", "duration", "age_rating", "release_date"],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "director": {
+            "type": "string"
+          },
+          "duration": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "description": {
+            "type": "string"
+          },
+          "genre_ids": {
+            "type": "array",
+            "items": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          "age_rating": {
+            "type": "integer"
+          },
+          "release_date": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ResponseMovie": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/RequestMovie"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer",
+                "format": "int64"
+              },
+              "genres": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/Genre"
+                }
+              },
+              "created_at": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "updated_at": {
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          }
+        ]
+      },
+      "RequestBooking": {
+        "type": "object",
+        "required": ["movie_id", "seats"],
+        "properties": {
+          "movie_id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "seats": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "UpdateBooking": {
+        "type": "object",
+        "properties": {
+          "seats": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "status": {
+            "type": "string"
+          }
+        }
+      },
+      "Booking": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "user_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "movie_id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "seats": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "status": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ResponseBooking": {
+        "$ref": "#/components/schemas/Booking"
+      },
+      "AppError": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

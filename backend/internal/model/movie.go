@@ -79,7 +79,7 @@ func (m *Movie) ResponseMovie() *ResponseMovie {
 }
 
 func ToResponseMovies(movies []*Movie) []*ResponseMovie {
-	res := make([]*ResponseMovie, len(movies))
+	res := make([]*ResponseMovie, 0, len(movies))
 	for _, movie := range movies {
 		res = append(res, movie.ResponseMovie())
 	}

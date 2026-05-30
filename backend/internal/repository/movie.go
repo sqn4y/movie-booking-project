@@ -90,6 +90,9 @@ func (m *movieRepository) FindAll(ctx context.Context) ([]*model.Movie, error) {
 
 		movies = append(movies, &movie)
 	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
 
 	return movies, nil
 }
@@ -142,6 +145,7 @@ func (m *movieRepository) GetGenresByMovieId(ctx context.Context, movieId int64)
 	if err != nil {
 		return nil, err
 	}
+	defer rows.Close()
 
 	genres := make([]*model.Genre, 0)
 	for rows.Next() {
@@ -155,10 +159,17 @@ func (m *movieRepository) GetGenresByMovieId(ctx context.Context, movieId int64)
 		}
 		genres = append(genres, &genre)
 	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
 	return genres, nil
 }
 
 func addGenresToMovie(ctx context.Context, tx *sql.Tx, movieId int64, genreIds []int64) error {
+	if len(genreIds) == 0 {
+		return nil
+	}
+
 	query := `INSERT INTO movie_genre (movie_id, genre_id) VALUES `
 
 	var args []interface{}

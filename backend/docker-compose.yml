@@ -15,14 +15,14 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U user -d subscription"]
+      test: ["CMD-SHELL", "pg_isready -U user -d movies_db"]
       interval: 5s
       timeout: 5s
       retries: 10
 
   migrate:
     image: migrate/migrate:v4.17.1
-    container_name: subscription-migrate
+    container_name: movies-migrate
 
     volumes:
       - ./migrations:/migrations

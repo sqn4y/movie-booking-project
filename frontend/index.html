@@ -1,9 +1,51 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-    <title>Todo App</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Booking</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Todo App</h1>
+    <main class="app">
+        <header class="topbar">
+            <div>
+                <h1>Movie Booking</h1>
+                <p id="moviesCount">Фильмы</p>
+            </div>
+            <button class="ghost-button" id="refreshButton" type="button">Обновить</button>
+        </header>
+
+        <section class="status" id="status" hidden></section>
+        <section class="movies-grid" id="moviesGrid"></section>
+    </main>
+
+    <dialog class="booking-dialog" id="bookingDialog">
+        <form method="dialog" class="booking-panel">
+            <div class="dialog-header">
+                <div>
+                    <p class="muted" id="dialogSubtitle">Бронирование</p>
+                    <h2 id="dialogTitle"></h2>
+                </div>
+                <button class="icon-button" id="closeDialogButton" value="cancel" type="submit">×</button>
+            </div>
+
+            <div class="screen">Экран</div>
+            <div class="seats" id="seatsGrid"></div>
+
+            <div class="legend">
+                <span><i class="seat free"></i>Свободно</span>
+                <span><i class="seat selected"></i>Выбрано</span>
+                <span><i class="seat booked"></i>Занято</span>
+            </div>
+
+            <div class="dialog-actions">
+                <p id="selectedSeatsText">Места не выбраны</p>
+                <button class="primary-button" id="confirmBookingButton" type="button" disabled>Забронировать</button>
+            </div>
+        </form>
+    </dialog>
+
+    <script src="script.js"></script>
 </body>
 </html>

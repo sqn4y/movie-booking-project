@@ -13,7 +13,21 @@ go run ./cmd/app
 
 Сервис будет доступен на `http://localhost:8080`.
 
-Swagger UI доступен на `http://localhost:8080/swagger/index.html`.
+## Swagger
+
+После запуска сервера Swagger UI доступен в браузере:
+
+```text
+http://localhost:8080/swagger/index.html
+```
+
+Через Swagger UI можно смотреть документацию и отправлять запросы в ручки кнопкой `Try it out`.
+
+OpenAPI JSON доступен по адресу:
+
+```text
+http://localhost:8080/swagger/doc.json
+```
 
 ## Тесты
 
